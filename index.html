@@ -3,20 +3,160 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- ⚙️ Troque [SEU NOME] pelo seu nome real -->
   <title>[SEU NOME] — Dev Full-Stack</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    :root {
+      --bg:#080c10; --bg2:#0d1117; --bg3:#161b22;
+      --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.12);
+      --neon:#00e5ff; --neon2:#39ff85; --neon-dim:rgba(0,229,255,0.08);
+      --text:#cdd6f4; --muted:#6b7280; --heading:#ffffff;
+      --sans:'Outfit',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
+      --ease:cubic-bezier(.4,0,.2,1);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:16px;line-height:1.7;overflow-x:hidden}
+    ::-webkit-scrollbar{width:4px} ::-webkit-scrollbar-track{background:var(--bg)} ::-webkit-scrollbar-thumb{background:var(--neon);border-radius:2px}
+    ::selection{background:rgba(0,229,255,0.2);color:#fff}
+    body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,0.025) 1px,transparent 1px);background-size:64px 64px;pointer-events:none;z-index:0}
+
+    /* NAV */
+    #nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 5%;height:64px;background:rgba(8,12,16,0.8);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);transition:background .3s var(--ease)}
+    .nav-logo{font-family:var(--mono);font-size:14px;color:var(--neon);letter-spacing:.05em}
+    .nav-logo span{color:var(--muted)}
+    .nav-links{display:flex;gap:2rem}
+    .nav-links a{font-size:13px;color:var(--muted);text-decoration:none;letter-spacing:.04em;transition:color .2s;position:relative}
+    .nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;right:0;height:1px;background:var(--neon);transform:scaleX(0);transition:transform .2s var(--ease)}
+    .nav-links a:hover{color:var(--neon)} .nav-links a:hover::after{transform:scaleX(1)}
+    .ham{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+    .ham span{display:block;width:24px;height:2px;background:var(--text);border-radius:1px;transition:all .3s var(--ease)}
+    .ham.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    .ham.open span:nth-child(2){opacity:0}
+    .ham.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+    .nav-mobile{display:none;position:fixed;top:64px;left:0;right:0;background:var(--bg2);border-bottom:1px solid var(--border);padding:1.5rem 5%;z-index:99;flex-direction:column;gap:1.25rem}
+    .nav-mobile.open{display:flex}
+    .nav-mobile a{font-size:15px;color:var(--text);text-decoration:none;transition:color .2s}
+    .nav-mobile a:hover{color:var(--neon)}
+
+    /* HERO */
+    #hero{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;padding:7rem 5% 4rem;max-width:1100px;margin:0 auto}
+    .hero-content{max-width:680px}
+    .hero-tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--neon);letter-spacing:.15em;text-transform:uppercase;margin-bottom:1.5rem;animation:fadeUp .5s both}
+    .hero-tag::before{content:'';width:28px;height:1px;background:var(--neon)}
+    .hero-name{font-size:clamp(2.8rem,6vw,5.5rem);font-weight:700;line-height:1.05;letter-spacing:-.03em;color:var(--heading);margin-bottom:.5rem;animation:fadeUp .5s .1s both}
+    .typewriter-wrap{font-size:clamp(1.1rem,2.5vw,1.6rem);font-weight:400;color:var(--neon);font-family:var(--mono);margin-bottom:1.5rem;min-height:2.2rem;animation:fadeUp .5s .2s both}
+    #typewriter{border-right:2px solid var(--neon);padding-right:3px;animation:blink .8s step-end infinite}
+    @keyframes blink{50%{border-color:transparent}}
+    .hero-slogan{font-size:1rem;color:var(--muted);max-width:520px;line-height:1.8;margin-bottom:2.5rem;animation:fadeUp .5s .3s both}
+    .hero-slogan strong{color:var(--text);font-weight:500}
+    .hero-links{display:flex;gap:12px;flex-wrap:wrap;animation:fadeUp .5s .4s both}
+    .social-btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:11px 22px;border-radius:4px;text-decoration:none;transition:all .2s var(--ease);border:1px solid}
+    .btn-neon{background:transparent;color:var(--neon);border-color:var(--neon)}
+    .btn-neon:hover{background:var(--neon);color:#000;box-shadow:0 0 20px rgba(0,229,255,.3)}
+    .btn-green{background:transparent;color:var(--neon2);border-color:var(--neon2)}
+    .btn-green:hover{background:var(--neon2);color:#000;box-shadow:0 0 20px rgba(57,255,133,.3)}
+    .scroll-hint{position:absolute;bottom:2.5rem;left:5%;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.1em;display:flex;align-items:center;gap:10px;animation:fadeUp .5s .6s both}
+    .scroll-hint::after{content:'';width:1px;height:40px;background:linear-gradient(to bottom,var(--muted),transparent)}
+
+    /* SECTIONS */
+    .section{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:6rem 5%}
+    .section-divider{max-width:1100px;margin:0 auto;border:none;border-top:1px solid var(--border)}
+    .sec-eyebrow{font-family:var(--mono);font-size:11px;color:var(--neon);letter-spacing:.2em;text-transform:uppercase;margin-bottom:.5rem}
+    .sec-title{font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:700;color:var(--heading);letter-spacing:-.02em;line-height:1.1;margin-bottom:1rem}
+    .sec-sub{font-size:15px;color:var(--muted);max-width:540px;line-height:1.8}
+    .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+    .reveal.in{opacity:1;transform:none}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+    /* SOBRE */
+    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;margin-top:3rem}
+    .about-avatar{aspect-ratio:1;border-radius:16px;background:var(--bg3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:6rem;position:relative;overflow:hidden}
+    .about-avatar::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,229,255,.08),transparent 60%)}
+    .about-text p{color:var(--muted);line-height:1.85;margin-bottom:1rem}
+    .about-text p strong{color:var(--text);font-weight:500}
+    .about-badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:1.5rem}
+    .badge{font-family:var(--mono);font-size:11px;padding:5px 12px;border-radius:4px;border:1px solid;letter-spacing:.06em}
+    .badge-neon{color:var(--neon);border-color:rgba(0,229,255,.3);background:rgba(0,229,255,.06)}
+    .badge-green{color:var(--neon2);border-color:rgba(57,255,133,.3);background:rgba(57,255,133,.06)}
+    .badge-muted{color:var(--muted);border-color:var(--border2);background:rgba(255,255,255,.03)}
+
+    /* SKILLS */
+    .skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:3rem}
+    .skill-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:1.25rem 1rem;text-align:center;transition:border-color .2s,transform .2s;position:relative;overflow:hidden}
+    .skill-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--card-clr,var(--neon));transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}
+    .skill-card:hover{border-color:var(--border2);transform:translateY(-3px)} .skill-card:hover::before{transform:scaleX(1)}
+    .skill-icon{font-size:2rem;margin-bottom:.6rem;display:block}
+    .skill-name{font-size:13px;font-weight:600;color:var(--heading);margin-bottom:.4rem}
+    .skill-level{font-size:11px;color:var(--muted);margin-bottom:.75rem}
+    .skill-bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+    .skill-fill{height:100%;border-radius:2px;background:var(--card-clr,var(--neon));width:0;transition:width 1.2s var(--ease)}
+    .skills-note{margin-top:2rem;padding:1rem 1.5rem;background:var(--neon-dim);border:1px solid rgba(0,229,255,.15);border-radius:8px;font-family:var(--mono);font-size:13px;color:var(--neon)}
+    .skills-note span{color:var(--text)}
+
+    /* PROJETOS */
+    .projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:3rem}
+    .proj-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:border-color .2s,transform .2s;display:flex;flex-direction:column}
+    .proj-card:hover{border-color:var(--border2);transform:translateY(-4px)}
+    .proj-thumb{height:160px;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:3rem;position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
+    .proj-thumb::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 60%,var(--bg3))}
+    .proj-body{padding:1.25rem;flex:1;display:flex;flex-direction:column}
+    .proj-type{font-family:var(--mono);font-size:10px;color:var(--neon);letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px}
+    .proj-name{font-size:1rem;font-weight:600;color:var(--heading);margin-bottom:6px}
+    .proj-desc{font-size:13px;color:var(--muted);line-height:1.7;flex:1;margin-bottom:1rem}
+    .proj-stack{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:1.25rem}
+    .proj-tag{font-family:var(--mono);font-size:10px;color:var(--muted);background:rgba(255,255,255,.04);border:1px solid var(--border);padding:2px 8px;border-radius:3px}
+    .proj-btns{display:flex;gap:8px}
+    .proj-btn{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:5px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:8px;border-radius:5px;border:1px solid;text-decoration:none;transition:all .2s}
+    .proj-btn-demo{color:var(--neon);border-color:rgba(0,229,255,.3);background:rgba(0,229,255,.06)} .proj-btn-demo:hover{background:var(--neon);color:#000}
+    .proj-btn-repo{color:var(--muted);border-color:var(--border2);background:transparent} .proj-btn-repo:hover{color:var(--text);border-color:var(--text)}
+
+    /* TIMELINE */
+    .timeline{position:relative;margin-top:3rem;padding-left:2rem}
+    .timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--neon),transparent)}
+    .tl-item{position:relative;margin-bottom:2.5rem} .tl-item:last-child{margin-bottom:0}
+    .tl-dot{position:absolute;left:-2.35rem;top:4px;width:10px;height:10px;border-radius:50%;background:var(--neon);box-shadow:0 0 10px rgba(0,229,255,.6)}
+    .tl-period{font-family:var(--mono);font-size:11px;color:var(--neon);letter-spacing:.1em;margin-bottom:5px}
+    .tl-role{font-size:1rem;font-weight:600;color:var(--heading);margin-bottom:3px}
+    .tl-company{font-size:13px;color:var(--muted);margin-bottom:8px}
+    .tl-desc{font-size:14px;color:var(--muted);line-height:1.75}
+    .tl-desc li{list-style:none;padding:2px 0} .tl-desc li::before{content:'→ ';color:var(--neon)}
+
+    /* CONTATO */
+    .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;margin-top:3rem}
+    .contact-info p{font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:2rem}
+    .contact-links{display:flex;flex-direction:column;gap:12px}
+    .contact-link{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--muted);text-decoration:none;padding:12px 16px;border-radius:8px;border:1px solid var(--border);transition:all .2s}
+    .contact-link:hover{border-color:var(--neon);color:var(--neon);background:var(--neon-dim)}
+    .contact-link-icon{font-size:18px;width:20px;text-align:center}
+    .contact-form{display:flex;flex-direction:column;gap:14px}
+    .form-group{display:flex;flex-direction:column;gap:6px}
+    .form-group label{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+    .form-group input,.form-group textarea{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:11px 14px;color:var(--text);font-family:var(--sans);font-size:14px;transition:border-color .2s;resize:vertical}
+    .form-group input:focus,.form-group textarea:focus{outline:none;border-color:var(--neon)}
+    .form-group textarea{min-height:120px}
+    .form-submit{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:13px;border-radius:6px;background:var(--neon);color:#000;border:none;cursor:pointer;transition:all .2s}
+    .form-submit:hover{box-shadow:0 0 24px rgba(0,229,255,.4);transform:translateY(-1px)}
+    .form-note{font-size:11px;color:var(--muted);text-align:center;font-family:var(--mono)}
+
+    /* FOOTER */
+    footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:2rem 5%;display:flex;align-items:center;justify-content:space-between;max-width:1100px;margin:0 auto;flex-wrap:wrap;gap:1rem}
+    .footer-copy{font-family:var(--mono);font-size:12px;color:var(--muted)} .footer-copy span{color:var(--neon)}
+    .footer-back{font-family:var(--mono);font-size:11px;color:var(--muted);text-decoration:none;letter-spacing:.08em;border:1px solid var(--border);padding:6px 14px;border-radius:4px;transition:all .2s}
+    .footer-back:hover{color:var(--neon);border-color:var(--neon)}
+    #back-top{position:fixed;bottom:2rem;right:2rem;z-index:200;width:44px;height:44px;border-radius:50%;background:var(--neon);color:#000;border:none;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(10px);transition:opacity .3s,transform .3s;box-shadow:0 0 20px rgba(0,229,255,.4)}
+    #back-top.show{opacity:1;transform:none}
+
+    /* RESPONSIVE */
+    @media(max-width:768px){.nav-links{display:none}.ham{display:flex}.about-grid{grid-template-columns:1fr}.about-avatar{max-width:220px;margin:0 auto}.contact-grid{grid-template-columns:1fr}.hero-links{flex-direction:column}.social-btn{text-align:center;justify-content:center}footer{flex-direction:column;align-items:flex-start}}
+    @media(max-width:480px){.skills-grid{grid-template-columns:repeat(2,1fr)}.projects-grid{grid-template-columns:1fr}}
+  </style>
 </head>
 <body>
 
-<!-- ============================================================
-  NAV
-============================================================ -->
 <nav id="nav">
-  <!-- ⚙️ Troque pelo seu nome ou iniciais -->
-  <div class="nav-logo">&lt;<span>dev</span>&gt; <!-- ⚙️ NOME --></div>
+  <div class="nav-logo">&lt;<span>dev</span>&gt; <!-- ⚙️ SEU NOME --></div>
   <div class="nav-links">
     <a href="#sobre">Sobre</a>
     <a href="#skills">Skills</a>
@@ -24,50 +164,36 @@
     <a href="#experiencia">Experiência</a>
     <a href="#contato">Contato</a>
   </div>
-  <div class="ham" id="ham" onclick="toggleMenu()">
-    <span></span><span></span><span></span>
-  </div>
+  <div class="ham" id="ham" onclick="toggleMenu()"><span></span><span></span><span></span></div>
 </nav>
 
 <div class="nav-mobile" id="nav-mobile">
-  <a href="#sobre"      onclick="closeMenu()">Sobre</a>
-  <a href="#skills"     onclick="closeMenu()">Skills</a>
-  <a href="#projetos"   onclick="closeMenu()">Projetos</a>
-  <a href="#experiencia"onclick="closeMenu()">Experiência</a>
-  <a href="#contato"    onclick="closeMenu()">Contato</a>
+  <a href="#sobre" onclick="closeMenu()">Sobre</a>
+  <a href="#skills" onclick="closeMenu()">Skills</a>
+  <a href="#projetos" onclick="closeMenu()">Projetos</a>
+  <a href="#experiencia" onclick="closeMenu()">Experiência</a>
+  <a href="#contato" onclick="closeMenu()">Contato</a>
 </div>
 
-<!-- ============================================================
-  HERO
-============================================================ -->
 <div id="hero">
   <div class="hero-content">
     <div class="hero-tag">Desenvolvedor Full-Stack</div>
-
-    <!-- ⚙️ Seu nome completo -->
-    <h1 class="hero-name">[Seu Nome]</h1>
-
-    <!-- Typewriter — textos configurados em script.js -->
+    <h1 class="hero-name">[Seu Nome]</h1> <!-- ⚙️ -->
     <div class="typewriter-wrap"><span id="typewriter"></span></div>
-
     <p class="hero-slogan">
-      <!-- ⚙️ Personalize este slogan -->
       <strong>Transformando processos em código.</strong><br>
       De Auxiliar Administrativo a desenvolvedor — unindo visão de negócio com tecnologia para construir soluções reais.
     </p>
-
     <div class="hero-links">
-      <!-- ⚙️ Substitua os links pelos seus -->
-      <a href="https://github.com/SEU_USUARIO" target="_blank" class="social-btn btn-neon">
+      <a href="https://github.com/SEU_USUARIO" target="_blank" class="social-btn btn-neon"> <!-- ⚙️ -->
         <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.82-.26.82-.57v-2.17c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.68.82.57C20.56 21.8 24 17.3 24 12 24 5.37 18.63 0 12 0z"/></svg>
         GitHub
       </a>
-      <a href="https://linkedin.com/in/SEU_USUARIO" target="_blank" class="social-btn btn-neon">
-        <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.59 0 4.26 2.37 4.26 5.44v6.3zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.02H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 .77 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+      <a href="https://linkedin.com/in/SEU_USUARIO" target="_blank" class="social-btn btn-neon"> <!-- ⚙️ -->
+        <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.59 0 4.26 2.37 4.26 5.44v6.3zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.02H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
         LinkedIn
       </a>
-      <!-- ⚙️ Substitua pelo seu número de WhatsApp -->
-      <a href="https://wa.me/5511999999999" target="_blank" class="social-btn btn-green">
+      <a href="https://wa.me/5511999999999" target="_blank" class="social-btn btn-green"> <!-- ⚙️ -->
         <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.27-.47-2.42-1.49-.89-.8-1.5-1.78-1.67-2.08-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.6-.91-2.2-.24-.57-.49-.5-.67-.51-.17 0-.37-.02-.57-.02-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.47s1.07 2.87 1.22 3.07c.15.2 2.1 3.2 5.09 4.49.7.3 1.25.48 1.68.62.7.22 1.34.19 1.84.12.56-.08 1.75-.72 2-1.41.24-.69.24-1.29.17-1.41-.07-.12-.27-.2-.57-.35zm-5.42 7.4h-.01a9.87 9.87 0 0 1-5.03-1.37l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26C2.16 6.48 6.48 2.16 11.06 2.16c2.62 0 5.08 1.02 6.93 2.87a9.75 9.75 0 0 1 2.87 6.94c-.01 5.41-4.4 9.81-9.81 9.81zm8.37-18.19A11.82 11.82 0 0 0 12.05 0C5.47 0 .1 5.37.1 12a11.9 11.9 0 0 0 1.59 5.99L0 24l6.18-1.62A11.93 11.93 0 0 0 12.05 24c6.57 0 11.95-5.37 11.95-12 0-3.2-1.25-6.22-3.58-8.41z"/></svg>
         WhatsApp
       </a>
@@ -76,22 +202,13 @@
   <div class="scroll-hint">scroll</div>
 </div>
 
-<!-- ============================================================
-  SOBRE MIM
-============================================================ -->
 <hr class="section-divider">
 <div class="section reveal" id="sobre">
   <div class="sec-eyebrow">01 // about</div>
   <h2 class="sec-title">Sobre mim</h2>
-
   <div class="about-grid">
-    <div class="about-avatar">
-      <!-- ⚙️ Substitua pelo <img> com sua foto:
-           <img src="foto.jpg" style="width:100%;height:100%;object-fit:cover"> -->
-      👨‍💻
-    </div>
+    <div class="about-avatar">👨‍💻</div> <!-- ⚙️ troque por <img src="foto.jpg" style="width:100%;height:100%;object-fit:cover"> -->
     <div class="about-text reveal">
-      <!-- ⚙️ Personalize com sua história -->
       <p>Sou <strong>[Seu Nome]</strong>, desenvolvedor em formação com <strong>experiência real no setor administrativo</strong> — o que me dá uma visão única de como automatizar processos e criar soluções que realmente resolvem problemas de negócio.</p>
       <p>Atualmente cursando <strong>Análise e Desenvolvimento de Sistemas na UNICID</strong> (previsão de conclusão: 2027), enquanto aplico na prática tudo que aprendo.</p>
       <p>Com <strong>X anos na Santa Casa de São Paulo</strong> como Auxiliar Administrativo, desenvolvi habilidades de organização, análise e comunicação que complementam minha carreira tech em construção.</p>
@@ -105,144 +222,71 @@
   </div>
 </div>
 
-<!-- ============================================================
-  SKILLS
-============================================================ -->
 <hr class="section-divider">
 <div class="section reveal" id="skills">
   <div class="sec-eyebrow">02 // skills</div>
   <h2 class="sec-title">Tech Stack</h2>
   <p class="sec-sub">Tecnologias que estudo e aplico em projetos reais.</p>
-
-  <!-- ⚙️ Ajuste data-w (0–100) para o seu nível em cada linguagem -->
   <div class="skills-grid">
-    <div class="skill-card" style="--card-clr:#e34c26">
-      <span class="skill-icon">🌐</span>
-      <div class="skill-name">HTML5</div>
-      <div class="skill-level">Intermediário</div>
-      <div class="skill-bar"><div class="skill-fill" data-w="75"></div></div>
-    </div>
-    <div class="skill-card" style="--card-clr:#264de4">
-      <span class="skill-icon">🎨</span>
-      <div class="skill-name">CSS3</div>
-      <div class="skill-level">Intermediário</div>
-      <div class="skill-bar"><div class="skill-fill" data-w="70"></div></div>
-    </div>
-    <div class="skill-card" style="--card-clr:#f7df1e">
-      <span class="skill-icon">⚡</span>
-      <div class="skill-name">JavaScript</div>
-      <div class="skill-level">Iniciante+</div>
-      <div class="skill-bar"><div class="skill-fill" data-w="45"></div></div>
-    </div>
-    <div class="skill-card" style="--card-clr:#777bb3">
-      <span class="skill-icon">🐘</span>
-      <div class="skill-name">PHP</div>
-      <div class="skill-level">Iniciante</div>
-      <div class="skill-bar"><div class="skill-fill" data-w="35"></div></div>
-    </div>
-    <div class="skill-card" style="--card-clr:#00aff0">
-      <span class="skill-icon">🗄️</span>
-      <div class="skill-name">SQL</div>
-      <div class="skill-level">Intermediário</div>
-      <div class="skill-bar"><div class="skill-fill" data-w="60"></div></div>
-    </div>
-    <div class="skill-card" style="--card-clr:#a8b9cc">
-      <span class="skill-icon">⚙️</span>
-      <div class="skill-name">C</div>
-      <div class="skill-level">Iniciante</div>
-      <div class="skill-bar"><div class="skill-fill" data-w="30"></div></div>
-    </div>
-    <div class="skill-card" style="--card-clr:#f89820">
-      <span class="skill-icon">☕</span>
-      <div class="skill-name">Java</div>
-      <div class="skill-level">Iniciante</div>
-      <div class="skill-bar"><div class="skill-fill" data-w="25"></div></div>
-    </div>
-    <div class="skill-card" style="--card-clr:#00e5ff">
-      <span class="skill-icon">🔧</span>
-      <div class="skill-name">Git</div>
-      <div class="skill-level">Básico</div>
-      <div class="skill-bar"><div class="skill-fill" data-w="40"></div></div>
-    </div>
+    <div class="skill-card" style="--card-clr:#e34c26"><span class="skill-icon">🌐</span><div class="skill-name">HTML5</div><div class="skill-level">Intermediário</div><div class="skill-bar"><div class="skill-fill" data-w="75"></div></div></div>
+    <div class="skill-card" style="--card-clr:#264de4"><span class="skill-icon">🎨</span><div class="skill-name">CSS3</div><div class="skill-level">Intermediário</div><div class="skill-bar"><div class="skill-fill" data-w="70"></div></div></div>
+    <div class="skill-card" style="--card-clr:#f7df1e"><span class="skill-icon">⚡</span><div class="skill-name">JavaScript</div><div class="skill-level">Iniciante+</div><div class="skill-bar"><div class="skill-fill" data-w="45"></div></div></div>
+    <div class="skill-card" style="--card-clr:#777bb3"><span class="skill-icon">🐘</span><div class="skill-name">PHP</div><div class="skill-level">Iniciante</div><div class="skill-bar"><div class="skill-fill" data-w="35"></div></div></div>
+    <div class="skill-card" style="--card-clr:#00aff0"><span class="skill-icon">🗄️</span><div class="skill-name">SQL</div><div class="skill-level">Intermediário</div><div class="skill-bar"><div class="skill-fill" data-w="60"></div></div></div>
+    <div class="skill-card" style="--card-clr:#a8b9cc"><span class="skill-icon">⚙️</span><div class="skill-name">C</div><div class="skill-level">Iniciante</div><div class="skill-bar"><div class="skill-fill" data-w="30"></div></div></div>
+    <div class="skill-card" style="--card-clr:#f89820"><span class="skill-icon">☕</span><div class="skill-name">Java</div><div class="skill-level">Iniciante</div><div class="skill-bar"><div class="skill-fill" data-w="25"></div></div></div>
+    <div class="skill-card" style="--card-clr:#00e5ff"><span class="skill-icon">🔧</span><div class="skill-name">Git</div><div class="skill-level">Básico</div><div class="skill-bar"><div class="skill-fill" data-w="40"></div></div></div>
   </div>
-
-  <!-- ⚙️ Atualize o número de lições -->
-  <div class="skills-note reveal">
-    🏆 <span>116+ lições concluídas no FreeCodeCamp</span> — Responsive Web Design & JavaScript Algorithms
-  </div>
+  <div class="skills-note reveal">🏆 <span>116+ lições concluídas no FreeCodeCamp</span> — Responsive Web Design &amp; JavaScript Algorithms</div>
 </div>
 
-<!-- ============================================================
-  PROJETOS
-============================================================ -->
 <hr class="section-divider">
 <div class="section reveal" id="projetos">
   <div class="sec-eyebrow">03 // projects</div>
   <h2 class="sec-title">Projetos</h2>
   <p class="sec-sub">O que tenho construído — do conceito ao código.</p>
-
   <div class="projects-grid">
 
-    <!-- PROJETO 1 -->
     <div class="proj-card reveal">
       <div class="proj-thumb">📚</div>
       <div class="proj-body">
         <div class="proj-type">Web App · EdTech</div>
         <div class="proj-name">DevEnglish Roadmap</div>
         <div class="proj-desc">SPA completa para aprender inglês com 30min/dia. Grade curricular modular, cronograma dinâmico semanal, curadoria de 12 recursos gratuitos e schema JSON para integração.</div>
-        <div class="proj-stack">
-          <span class="proj-tag">HTML5</span>
-          <span class="proj-tag">CSS3</span>
-          <span class="proj-tag">JavaScript</span>
-          <span class="proj-tag">JSON API</span>
-        </div>
+        <div class="proj-stack"><span class="proj-tag">HTML5</span><span class="proj-tag">CSS3</span><span class="proj-tag">JavaScript</span><span class="proj-tag">JSON API</span></div>
         <div class="proj-btns">
-          <!-- ⚙️ Link do deploy e do repo -->
-          <a href="#" class="proj-btn proj-btn-demo">▶ Demo</a>
-          <a href="https://github.com/SEU_USUARIO/devenglish" target="_blank" class="proj-btn proj-btn-repo">
-            <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.82-.26.82-.57v-2.17c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.01 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.68.82.57C20.56 21.8 24 17.3 24 12 24 5.37 18.63 0 12 0z"/></svg>
-            Repo
+          <a href="#" class="proj-btn proj-btn-demo">▶ Demo</a> <!-- ⚙️ -->
+          <a href="https://github.com/SEU_USUARIO/devenglish" target="_blank" class="proj-btn proj-btn-repo"> <!-- ⚙️ -->
+            <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.82-.26.82-.57v-2.17c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.01 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.68.82.57C20.56 21.8 24 17.3 24 12 24 5.37 18.63 0 12 0z"/></svg> Repo
           </a>
         </div>
       </div>
     </div>
 
-    <!-- PROJETO 2 — ⚙️ Substitua pelo seu projeto real -->
     <div class="proj-card reveal">
       <div class="proj-thumb">🖥️</div>
       <div class="proj-body">
         <div class="proj-type">Website · Pessoal</div>
-        <div class="proj-name">[Nome do Projeto]</div>
+        <div class="proj-name">[Nome do Projeto]</div> <!-- ⚙️ -->
         <div class="proj-desc">Descreva aqui o que este projeto faz, qual problema ele resolve e o que você aprendeu construindo-o. Seja específico e objetivo.</div>
-        <div class="proj-stack">
-          <span class="proj-tag">HTML5</span>
-          <span class="proj-tag">CSS3</span>
-          <span class="proj-tag">JavaScript</span>
-        </div>
+        <div class="proj-stack"><span class="proj-tag">HTML5</span><span class="proj-tag">CSS3</span><span class="proj-tag">JavaScript</span></div>
         <div class="proj-btns">
           <a href="#" class="proj-btn proj-btn-demo">▶ Demo</a>
-          <a href="#" class="proj-btn proj-btn-repo">
-            <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.82-.26.82-.57v-2.17c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.01 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.68.82.57C20.56 21.8 24 17.3 24 12 24 5.37 18.63 0 12 0z"/></svg>
-            Repo
-          </a>
+          <a href="#" class="proj-btn proj-btn-repo"><svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.82-.26.82-.57v-2.17c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.01 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.68.82.57C20.56 21.8 24 17.3 24 12 24 5.37 18.63 0 12 0z"/></svg> Repo</a>
         </div>
       </div>
     </div>
 
-    <!-- PROJETO 3 — placeholder -->
     <div class="proj-card reveal">
-      <div class="proj-thumb" style="background: repeating-linear-gradient(45deg,#161b22,#161b22 10px,#0d1117 10px,#0d1117 20px);">
-        <span style="font-size:2rem;position:relative;z-index:1">🚧</span>
-      </div>
+      <div class="proj-thumb" style="background:repeating-linear-gradient(45deg,#161b22,#161b22 10px,#0d1117 10px,#0d1117 20px)"><span style="font-size:2rem;position:relative;z-index:1">🚧</span></div>
       <div class="proj-body">
         <div class="proj-type">Em desenvolvimento</div>
         <div class="proj-name">Próximo Projeto</div>
         <div class="proj-desc">Em breve. Acompanhe o GitHub para ver o que está sendo construído.</div>
         <div class="proj-stack"><span class="proj-tag">Em breve</span></div>
         <div class="proj-btns">
-          <a href="https://github.com/SEU_USUARIO" target="_blank" class="proj-btn proj-btn-repo" style="flex:1">
-            <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.82-.26.82-.57v-2.17c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.01 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.68.82.57C20.56 21.8 24 17.3 24 12 24 5.37 18.63 0 12 0z"/></svg>
-            Ver GitHub
+          <a href="https://github.com/SEU_USUARIO" target="_blank" class="proj-btn proj-btn-repo" style="flex:1"> <!-- ⚙️ -->
+            <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.82-.26.82-.57v-2.17c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.01 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.68.82.57C20.56 21.8 24 17.3 24 12 24 5.37 18.63 0 12 0z"/></svg> Ver GitHub
           </a>
         </div>
       </div>
@@ -251,17 +295,12 @@
   </div>
 </div>
 
-<!-- ============================================================
-  EXPERIÊNCIA — TIMELINE
-============================================================ -->
 <hr class="section-divider">
 <div class="section reveal" id="experiencia">
   <div class="sec-eyebrow">04 // experience</div>
   <h2 class="sec-title">Linha do tempo</h2>
   <p class="sec-sub">Da administração ao desenvolvimento — uma transição de carreira com propósito.</p>
-
   <div class="timeline">
-
     <div class="tl-item reveal">
       <div class="tl-dot"></div>
       <div class="tl-period">2024 — Presente</div>
@@ -273,114 +312,112 @@
         <li>Desenvolvendo projetos práticos em HTML, CSS e JavaScript</li>
       </ul>
     </div>
-
-    <!-- ⚙️ Preencha com seus dados reais -->
     <div class="tl-item reveal">
-      <div class="tl-dot" style="background:var(--neon2);box-shadow:0 0 10px rgba(57,255,133,0.6)"></div>
-      <div class="tl-period" style="color:var(--neon2)">[ANO] — Presente</div>
+      <div class="tl-dot" style="background:var(--neon2);box-shadow:0 0 10px rgba(57,255,133,.6)"></div>
+      <div class="tl-period" style="color:var(--neon2)">[ANO] — Presente</div> <!-- ⚙️ -->
       <div class="tl-role">Auxiliar Administrativo</div>
-      <div class="tl-company">Santa Casa de São Paulo · [Setor/Departamento]</div>
+      <div class="tl-company">Santa Casa de São Paulo · [Setor]</div> <!-- ⚙️ -->
       <ul class="tl-desc">
-        <li>[Descreva uma responsabilidade principal aqui]</li>
-        <li>[Descreva uma conquista ou projeto relevante]</li>
-        <li>[Descreva alguma automação ou melhoria de processo que você fez]</li>
+        <li>[Responsabilidade principal]</li> <!-- ⚙️ -->
+        <li>[Conquista relevante]</li>
+        <li>[Automação ou melhoria de processo]</li>
       </ul>
     </div>
-
     <div class="tl-item reveal">
       <div class="tl-dot" style="background:var(--muted);box-shadow:none"></div>
-      <div class="tl-period" style="color:var(--muted)">[ANO ANTERIOR]</div>
+      <div class="tl-period" style="color:var(--muted)">[ANO ANTERIOR]</div> <!-- ⚙️ -->
       <div class="tl-role">[Cargo ou Formação Anterior]</div>
       <div class="tl-company">[Empresa ou Instituição]</div>
-      <ul class="tl-desc">
-        <li>[Descrição breve]</li>
-      </ul>
+      <ul class="tl-desc"><li>[Descrição breve]</li></ul>
     </div>
-
   </div>
 </div>
 
-<!-- ============================================================
-  CONTATO
-============================================================ -->
 <hr class="section-divider">
 <div class="section reveal" id="contato">
   <div class="sec-eyebrow">05 // contact</div>
   <h2 class="sec-title">Contato</h2>
-
   <div class="contact-grid">
     <div class="contact-info reveal">
       <p>Aberto a oportunidades de estágio, projetos freelance ou apenas para trocar uma ideia sobre tecnologia. Respondo rápido!</p>
       <div class="contact-links">
-        <!-- ⚙️ Seus dados reais -->
-        <a href="mailto:seuemail@email.com" class="contact-link">
-          <span class="contact-link-icon">✉️</span>
-          seuemail@email.com
-        </a>
-        <a href="https://linkedin.com/in/SEU_USUARIO" target="_blank" class="contact-link">
-          <span class="contact-link-icon">
-            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.59 0 4.26 2.37 4.26 5.44v6.3zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.02H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
-          </span>
+        <a href="mailto:seuemail@email.com" class="contact-link"><span class="contact-link-icon">✉️</span> seuemail@email.com</a> <!-- ⚙️ -->
+        <a href="https://linkedin.com/in/SEU_USUARIO" target="_blank" class="contact-link"> <!-- ⚙️ -->
+          <span class="contact-link-icon"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.59 0 4.26 2.37 4.26 5.44v6.3zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.02H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></span>
           linkedin.com/in/SEU_USUARIO
         </a>
-        <a href="https://github.com/SEU_USUARIO" target="_blank" class="contact-link">
-          <span class="contact-link-icon">
-            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.82-.26.82-.57v-2.17c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.01 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.68.82.57C20.56 21.8 24 17.3 24 12 24 5.37 18.63 0 12 0z"/></svg>
-          </span>
+        <a href="https://github.com/SEU_USUARIO" target="_blank" class="contact-link"> <!-- ⚙️ -->
+          <span class="contact-link-icon"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.82-.26.82-.57v-2.17c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.01 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.68.82.57C20.56 21.8 24 17.3 24 12 24 5.37 18.63 0 12 0z"/></svg></span>
           github.com/SEU_USUARIO
         </a>
-        <a href="https://wa.me/5511999999999" target="_blank" class="contact-link">
-          <span class="contact-link-icon">💬</span>
-          WhatsApp
-        </a>
+        <a href="https://wa.me/5511999999999" target="_blank" class="contact-link"><span class="contact-link-icon">💬</span> WhatsApp</a> <!-- ⚙️ -->
       </div>
     </div>
-
-    <!-- ============================================================
-      FORMULÁRIO DE CONTATO
-      ⚙️ Acesse formspree.io, crie um form e substitua YOUR_FORM_ID
-         Ex: action="https://formspree.io/f/xpzgkrwl"
-    ============================================================ -->
-    <form
-      class="contact-form reveal"
-      action="https://formspree.io/f/YOUR_FORM_ID"
-      method="POST"
-      onsubmit="handleSubmit(event)"
-    >
-      <div class="form-group">
-        <label for="name">Nome</label>
-        <input type="text" id="name" name="name" placeholder="Seu nome" required>
-      </div>
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" placeholder="seu@email.com" required>
-      </div>
-      <div class="form-group">
-        <label for="msg">Mensagem</label>
-        <textarea id="msg" name="message" placeholder="Olá! Gostaria de conversar sobre..." required></textarea>
-      </div>
+    <!-- ⚙️ Formspree: crie conta em formspree.io e troque YOUR_FORM_ID -->
+    <form class="contact-form reveal" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" onsubmit="handleSubmit(event)">
+      <div class="form-group"><label for="name">Nome</label><input type="text" id="name" name="name" placeholder="Seu nome" required></div>
+      <div class="form-group"><label for="email">Email</label><input type="email" id="email" name="email" placeholder="seu@email.com" required></div>
+      <div class="form-group"><label for="msg">Mensagem</label><textarea id="msg" name="message" placeholder="Olá! Gostaria de conversar sobre..." required></textarea></div>
       <button type="submit" class="form-submit">Enviar mensagem</button>
       <p class="form-note" id="form-status"></p>
     </form>
-
   </div>
 </div>
 
-<!-- ============================================================
-  FOOTER
-============================================================ -->
 <footer>
-  <!-- ⚙️ Seu nome e o ano atual -->
-  <div class="footer-copy">
-    Feito com ❤️ por <span>[Seu Nome]</span> · 2025
-  </div>
+  <div class="footer-copy">Feito com ❤️ por <span>[Seu Nome]</span> · 2025</div> <!-- ⚙️ -->
   <a href="#hero" class="footer-back">↑ Voltar ao topo</a>
 </footer>
 
-<!-- Botão flutuante voltar ao topo -->
 <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
-<!-- Script externo — sempre no final do body -->
-<script src="script.js"></script>
+<script>
+  /* ⚙️ Edite as frases do typewriter aqui */
+  const words = [
+    "Transformando processos em código.",
+    "Dev Full-Stack em construção.",
+    "ADM + Tecnologia = Soluções reais.",
+    "UNICID · ADS 2027.",
+  ];
+  let wi=0,ci=0,del=false;
+  const twEl=document.getElementById('typewriter');
+  function type(){
+    const w=words[wi];
+    twEl.textContent=del?w.slice(0,--ci):w.slice(0,++ci);
+    if(!del&&ci===w.length){setTimeout(()=>del=true,1800)}
+    else if(del&&ci===0){del=false;wi=(wi+1)%words.length}
+    setTimeout(type,del?45:90);
+  }
+  type();
+
+  function toggleMenu(){document.getElementById('ham').classList.toggle('open');document.getElementById('nav-mobile').classList.toggle('open')}
+  function closeMenu(){document.getElementById('ham').classList.remove('open');document.getElementById('nav-mobile').classList.remove('open')}
+
+  const revObs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:0.08});
+  document.querySelectorAll('.reveal').forEach(el=>revObs.observe(el));
+
+  const pbObs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.style.width=e.target.dataset.w+'%'}),{threshold:0.4});
+  document.querySelectorAll('.skill-fill').forEach(el=>pbObs.observe(el));
+
+  window.addEventListener('scroll',()=>{
+    document.getElementById('back-top').classList.toggle('show',scrollY>400);
+    document.getElementById('nav').style.background=scrollY>10?'rgba(8,12,16,0.95)':'rgba(8,12,16,0.8)';
+    let cur='';
+    document.querySelectorAll('[id]').forEach(s=>{if(scrollY>=s.offsetTop-80)cur=s.id});
+    document.querySelectorAll('.nav-links a').forEach(a=>{a.style.color=a.getAttribute('href')==='#'+cur?'var(--neon)':''});
+  });
+
+  async function handleSubmit(e){
+    e.preventDefault();
+    const form=e.target,status=document.getElementById('form-status'),btn=form.querySelector('.form-submit');
+    btn.textContent='Enviando...';btn.disabled=true;
+    try{
+      const res=await fetch(form.action,{method:'POST',body:new FormData(form),headers:{'Accept':'application/json'}});
+      if(res.ok){status.textContent='✓ Mensagem enviada! Te respondo em breve.';status.style.color='var(--neon2)';form.reset()}
+      else throw new Error();
+    }catch{status.textContent='✗ Erro ao enviar. Tente pelo WhatsApp.';status.style.color='#f87171'}
+    btn.textContent='Enviar mensagem';btn.disabled=false;
+  }
+</script>
 </body>
 </html>

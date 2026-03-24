@@ -1,9 +1,9 @@
-/* ⚙️ Edite as frases do typewriter aqui */
+/* ⚙️ Palavras atualizadas para o foco em Banco de Dados */
 const words = [
-  "Transformando processos em código.",
-  "Dev Full-Stack em construção.",
-  "ADM + Tecnologia = Soluções reais.",
-  "UNICID · ADS 2027.",
+  "Apaixonado por Banco de Dados.",
+  "Foco em SQL e Modelagem.",
+  "Estudante de ADS na UNICID.",
+  "CS50 SQL - Harvard Online."
 ];
 
 let wi = 0, ci = 0, del = false;
@@ -52,18 +52,19 @@ document.querySelectorAll('.skill-fill').forEach(el => pbObs.observe(el));
 window.addEventListener('scroll', () => {
   document.getElementById('back-top').classList.toggle('show', scrollY > 400);
   document.getElementById('nav').style.background =
-    scrollY > 10 ? 'rgba(8,12,16,0.95)' : 'rgba(8,12,16,0.8)';
+    scrollY > 10 ? 'rgba(9, 9, 11, 0.95)' : 'rgba(9, 9, 11, 0.8)';
 
   let cur = '';
   document.querySelectorAll('[id]').forEach(s => {
     if (scrollY >= s.offsetTop - 80) cur = s.id;
   });
   document.querySelectorAll('.nav-links a').forEach(a => {
-    a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--neon)' : '';
+    a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--heading)' : '';
+    a.style.fontWeight = a.getAttribute('href') === '#' + cur ? '700' : '500';
   });
 });
 
-/* Formulário de contato — Formspree */
+/* Formulário de contato */
 async function handleSubmit(e) {
   e.preventDefault();
   const form = e.target;
@@ -81,14 +82,14 @@ async function handleSubmit(e) {
     });
     if (res.ok) {
       status.textContent = '✓ Mensagem enviada! Te respondo em breve.';
-      status.style.color = 'var(--neon2)';
+      status.style.color = 'var(--primary)';
       form.reset();
     } else {
       throw new Error();
     }
   } catch {
     status.textContent = '✗ Erro ao enviar. Tente pelo WhatsApp.';
-    status.style.color = '#f87171';
+    status.style.color = '#ef4444';
   }
 
   btn.textContent = 'Enviar mensagem';
